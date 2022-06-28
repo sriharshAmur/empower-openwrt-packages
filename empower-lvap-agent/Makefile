@@ -13,7 +13,7 @@ PKG_RELEASE:=1
 PKG_REV:=b4034df3b54d74a16208ce5f9c1015513fe98c2c
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=https://github.com/5g-empower/empower-lvap-agent.git
+PKG_SOURCE_URL:=https://github.com/sriharshAmur/empower-lvap-agent.git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=git
