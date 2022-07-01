@@ -109,13 +109,16 @@ ControlSocket(\"TCP\", 7777);
 
 ers :: EmpowerRXStats(EL el);
 
+dscpStats :: DSCPStats();
+traffic_rules :: TrafficRules();
+
 wifi_cl :: Classifier(0/08%0c,  // data
                       0/00%0c); // mgt
 
 ers -> wifi_cl;
-
+packet_tee ::Tee();
 tee :: EmpowerTee($NUM_IFACES, EL el);
-
+checker :: CheckIPHeader2(OFFSET 14, VERBOSE  true)
 switch_mngt :: PaintSwitch();
 """
 
@@ -169,6 +172,15 @@ switch_mngt[$IDX]
   -> [0] sched_$IDX;
 
 tee[$IDX]
+  -> checker
+  -> dscpStats
+  -> traffic_rules
+  -> packet_tee;
+
+checker[1]
+  -> packet_tee;
+
+packet_tee
   -> MarkIPHeader(14)
   -> Paint($IDX)
   -> eqm_$IDX
@@ -195,6 +207,8 @@ ctrl :: Socket(TCP, $MASTER_IP, $MASTER_PORT, CLIENT true, VERBOSE true, RECONNE
                                 ERS ers,
                                 EQMS \"$EQMS\",
                                 REGMONS \"$REGS\",
+                                DSCP dscpStats,
+                                TR traffic_rules,
                                 DEBUG $DEBUG)
     -> ctrl;
 
